@@ -1,0 +1,91 @@
+accounts/
+accounts/<int:account_id>/
+GET, POST:
+{
+    name,
+    address,
+    email,
+    phone,
+    alternate_phone,
+    account_type
+}
+
+customers/
+customers/<int:customer_id>/
+GET, POST:
+{
+    name,
+    email,
+    phone,
+    whatsapp_number
+}
+
+dispatch-entries/
+dispatch-entries/<int:entry_id>/
+GET, POST,PUT,DELETE:
+{
+    dispatch_entry_id
+    partner_caseid
+    partner_service_id
+    repair_status
+    scheduled_date
+    is_scheduled
+    pickup_location
+    dropoff_location
+    eta
+    case_id
+    account_id
+    service_type_id
+    reason_id,
+    customer_id
+    asset_id
+    dispatch_status_id
+    csr_id
+    company_id
+}
+
+driver-locations/
+driver-locations/<int:location_id>/
+GET, POST:
+{
+    company_id
+    latitude
+    longitude
+    company_id
+}
+
+rate-items/
+rate-items/<int:rate_item_id>/
+GET, POST:
+{
+    name
+    account_id
+    account_name
+    account_company_id
+    vehicle_id
+    default_rate_4w
+    default_rate_2w
+    budget_2w
+    premium_2w
+    luxury_2w
+    budget_4w
+    premium_4w
+    luxury_4w
+    suv_4w
+}
+
+vehicles/
+vehicles/<int:vehicle_id>/
+GET, POST:
+{
+    vehicle_id
+    make
+    vehicle_class
+    vehicle_type
+}
+
+drivers/nearby/?pickup_latitude=<PICKUP_LATITUDE>&pickup_longitude=<PICKUP_LONGITUDE>
+{
+    pickup_latitude,
+    pickup_longitude
+}
