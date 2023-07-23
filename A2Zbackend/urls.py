@@ -45,8 +45,8 @@ urlpatterns = [
     path('entry-status-records/', views.dispatch_entry_status_records_list),
     path('entry-status-records/<int:record_id>/', views.dispatch_entry_status_records_detail),
 
-    path('dispatch_entries/', dispatch_entry_list, name='dispatch-entry-list'),
-    path('dispatch_entries/<int:entry_id>/', dispatch_entry_detail, name='dispatch-entry-detail'),
+    path('dispatch-entries/', dispatch_entry_list, name='dispatch-entry-list'),
+    path('dispatch-entries/<int:entry_id>/', dispatch_entry_detail, name='dispatch-entry-detail'),
 
     path('driver-locations/', views.driver_location_list),
     path('driver-locations/<int:location_id>/', views.driver_location_detail),

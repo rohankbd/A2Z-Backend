@@ -112,7 +112,7 @@ class DispatchEntryAssets(models.Model):
     colorid = models.IntegerField()
     body_type_id = models.IntegerField()
     make = models.CharField(max_length=100)
-    model = models.CharField(max_length=100)
+    # model = models.CharField(max_length=100)
     model_year = models.IntegerField()
     license_plate = models.CharField(max_length=100)
     license_state = models.CharField(max_length=100)
