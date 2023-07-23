@@ -89,3 +89,28 @@ drivers/nearby/?pickup_latitude=<PICKUP_LATITUDE>&pickup_longitude=<PICKUP_LONGI
     pickup_latitude,
     pickup_longitude
 }
+
+dispatch-details/<int:entry_id>/
+GET:
+{
+    "service"
+    "Account": {
+        "name"
+    },
+    "Customer Partner"
+    "CSR ID"
+    "CustomerInfo": {
+        "name"
+        "phone"
+        "email"
+    },
+    "Location": {
+        "pickup_location"
+        "dropoff_location"
+    },
+    "Assets": {
+        "make"
+        "body_type"
+        "license_plate"
+    }
+}
