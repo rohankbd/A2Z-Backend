@@ -10,41 +10,44 @@ from django.conf import settings
 from math import radians, sin, cos, sqrt, atan2
 
 
-@api_view(['POST'])
-def create_dispatch_entry(request):
-    service_id = request.data.get('service', {}).get('serviceId')
-    customer_partner_id = request.data.get('Customer Partner', {}).get('id')
-    customer_name = request.data.get('CustomerInfo', {}).get('name')
-    customer_phone = request.data.get('CustomerInfo', {}).get('phone')
-    customer_email = request.data.get('CustomerInfo', {}).get('email')
-    make = request.data.get('assets', {}).get('make')
-    model = request.data.get('assets', {}).get('model')
-    color = request.data.get('assets', {}).get('color')
-    year = request.data.get('assets', {}).get('year')
-    street = request.data.get('location', {}).get('street')
-    city = request.data.get('location', {}).get('city')
-    state = request.data.get('location', {}).get('state')
-    zip_code = request.data.get('location', {}).get('zip')
-    longitude = request.data.get('location', {}).get('longitude')
-    latitude = request.data.get('location', {}).get('latitude')
-    address = request.data.get('location', {}).get('address')
-    job_price = request.data.get('jobInfo', {}).get('price')
+@api_view(['GET'])
+def dispatch_details(request, entry_id):
+    try:
+        dispatch_entry = DispatchEntry.objects.get(dispatch_entry_id=entry_id)
 
-    dispatch_entry = DispatchEntry.objects.create(
-        service_type_id=ServiceTypes.objects.get(service_type_id=service_id),
-        customer_id=Customers.objects.create(name=customer_name, phone=customer_phone, email=customer_email),
-        asset_id=DispatchEntryAssets.objects.create(make=make, model=model, colorid=color, model_year=year),
-    )
+        service_serializer = ServiceTypesSerializer(dispatch_entry.service_type_id)
+        company_serializer = CompanySerializer(dispatch_entry.company_id)
+        customer_serializer = CustomersSerializer(dispatch_entry.customer_id)
+        assets_serializer = DispatchEntryAssetsSerializer(dispatch_entry.asset_id)
+        account_serializer = AccountsSerializer(dispatch_entry.account_id)
+        case_serializer = CasesSerializer(dispatch_entry.case_id)
 
-    response_data = {
-        "service": {"serviceId": service_id},
-        "Customer Partner": {"id": customer_partner_id},
-        "CustomerInfo": {"name": customer_name, "phone": customer_phone, "email": customer_email},
-        "location": {"street": street, "city": city, "state": state, "zip": zip_code, "longitude": longitude, "latitude": latitude, "address": address},
-        "assets": {"make": make, "model": model, "color": color, "year": year},
-        "jobInfo": {"price": job_price}
-    }
-    return Response(response_data)
+        response_data = {
+            "service": service_serializer.data.get("service"),
+            "Account": {
+                "name": account_serializer.data.get("name"),
+            },
+            "Customer Partner": company_serializer.data.get("name"),
+            "CSR ID": case_serializer.data.get("csr_id"),
+            "CustomerInfo": {
+                "name": customer_serializer.data.get("name"),
+                "phone": customer_serializer.data.get("phone"),
+                "email": customer_serializer.data.get("email"),
+            },
+            "Location": {
+                "pickup_location": dispatch_entry.pickup_location,
+                "dropoff_location": dispatch_entry.dropoff_location,
+            },
+            "Assets": {
+                "make": assets_serializer.data.get("make"),
+                "body_type": assets_serializer.data.get("body_type_id"),
+                "license_plate": assets_serializer.data.get("license_plate"),
+            },
+        }
+
+        return Response(response_data, status=200)
+    except DispatchEntry.DoesNotExist:
+        return Response({'error': 'DispatchEntry with the given ID does not exist.'}, status=404)
 
 ## Accounts API
 @api_view(['GET', 'POST'])

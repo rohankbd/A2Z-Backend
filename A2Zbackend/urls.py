@@ -7,10 +7,9 @@ app_name = 'A2Zbackend'
 urlpatterns = [
     # path('create-customers/', views.create_customer),
     # path('create-service/', views.create_service),
-    
-    path('create-dispatch-entry/', views.create_dispatch_entry),
-    
     #path('nearby-drivers/', nearby_drivers_api, name='nearby-drivers'),
+    
+    path('dispatch-details/<int:entry_id>/', views.dispatch_details, name='dispatch-details'),
     
     path('accounts/', views.accounts_list),
     path('accounts/<int:account_id>/', views.accounts_detail),
