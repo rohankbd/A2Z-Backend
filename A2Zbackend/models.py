@@ -247,6 +247,15 @@ class SystemUser(models.Model):
     role=models.CharField(max_length=50)
     role_id = models.IntegerField()
     status = models.CharField(max_length=100)
+    
+    def save(self, *args, **kwargs):
+        if not self.csr_id:
+            last_driver_location = SystemUser.objects.order_by('-csr_id').first()
+            if last_driver_location:
+                self.csr_id = last_driver_location.csr_id + 1
+            else:
+                self.csr_id = 1
+        super(SystemUser, self).save(*args, **kwargs)
 
 class SystemUserStatusRecords(models.Model):
     id = models.AutoField(primary_key=True)
