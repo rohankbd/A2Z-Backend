@@ -28,6 +28,15 @@ class Cases(models.Model):
     case_id = models.AutoField(primary_key=True)
     dispatch_entry_id = models.ForeignKey('DispatchEntry', on_delete=models.CASCADE, null=True)
     csr_id = models.ForeignKey('SystemUser',on_delete=models.CASCADE)
+    
+    def save(self, *args, **kwargs):
+        if not self.case_id:
+            last_account = Cases.objects.order_by('-case_id').first()
+            if last_account:
+                self.case_id = last_account.case_id + 1
+            else:
+                self.case_id = 1
+        super(Cases, self).save(*args, **kwargs)
 
 class Company(models.Model):
     company_id = models.IntegerField(primary_key=True)
